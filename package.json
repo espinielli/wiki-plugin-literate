@@ -1,0 +1,37 @@
+{
+  "name": "wiki-plugin-literate",
+  "version": "0.0.1",
+  "description": "Federated Wiki - Literate Plug-in",
+  "keywords": [
+    "wiki",
+    "federated wiki",
+    "plugin"
+  ],
+  "author": {
+    "name": "Enrico Spinielli",
+    "email": "enrico.spinielli@gmail.com",
+    "url": "http://ward.fed.wiki.org"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.x",
+    "grunt-contrib-coffee": "~0.7.x",
+    "grunt-contrib-watch": "~0.5.x",
+    "mocha": "*",
+    "expect.js": "*",
+    "grunt-mocha-test": "~0.8.1"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/espinielli/wiki-plugin-literate.git"
+  },
+  "bugs": {
+    "url": "https://github.com/espinielli/wiki-plugin-literate/issues"
+  },
+  "engines": {
+    "node": "0.10"
+  }
+}

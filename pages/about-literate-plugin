@@ -1,0 +1,37 @@
+{
+  "title": "About Literate Plugin",
+  "story": [
+  {
+    "type": "paragraph",
+    "id": "8056dadaef5f2e83",
+    "text": "The purpose of the Literate plugin is to describe computer programs for the humans that are creating, maintaining or want to learn about them.\n"
+  },
+  {
+    "type": "literate",
+    "id": "c2cd402017a185b5",
+    "text": "This is a code chunk in the new plugin. You can double-click to edit it too."
+  }
+],
+  "journal": [
+  {
+    "type": "create",
+    "item": {
+      "title": "About Literate Plugin",
+      "story": [
+  {
+    "type": "paragraph",
+    "id": "8056dadaef5f2e83",
+    "text": "Here we describe the purpose of the plugin and include a sample."
+  },
+  {
+    "type": "literate",
+    "id": "c2cd402017a185b5",
+    "text": "This is text in the new plugin. You can double-click to edit it too."
+  }
+]
+    },
+    "date": 1387634850000,
+    "certificate": "from mkplugin.sh"
+  }
+]
+}

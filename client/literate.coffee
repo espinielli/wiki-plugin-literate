@@ -65,16 +65,16 @@ class window.plugins.literate
       for c in lines
         if m = /^(.*)@\[(.*)\]@(.*)$/g.exec c
           if chunk.length > 0
-            codechunk.append """<pre class="prettyprint lang-#{config.lang}">#{prettyPrintOne(escape(chunk.join "\n"))}</pre>"""
+            codechunk.append """<pre class="prettyprint lang-#{config.lang}" style="margin:0px; padding:0px">#{prettyPrintOne(escape(chunk.join "\n"))}</pre>"""
           codechunk.append """
-            <pre class="prettyprint lang-text">#{prettyPrintOne(escape(m[1]))}<a href="#{"#".concat (wiki.asSlug m[2])}">@[#{m[2]}]@</a>#{prettyPrintOne(escape(m[3]))}</pre>
+            <pre class="prettyprint lang-text" style="margin:0px; padding:0px">#{prettyPrintOne(escape(m[1]))}<a href="#{"#".concat (wiki.asSlug m[2])}">@[#{m[2]}]@</a>#{prettyPrintOne(escape(m[3]))}</pre>
             """
           chunk = []
         else
           chunk.push c
 
       if chunk.length > 0
-        codechunk.append "<pre class='prettyprint lang-#{config.lang}'>#{prettyPrintOne(escape(chunk.join "\n"))}</pre>"
+        codechunk.append """<pre class="prettyprint lang-#{config.lang}" style="margin:0px; padding:0px">#{prettyPrintOne(escape(chunk.join "\n"))}</pre>"""
 
 
   @bind: (div, item) ->

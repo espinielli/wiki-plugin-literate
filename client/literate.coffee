@@ -52,7 +52,7 @@ class window.plugins.literate
 
       div.append """
         <div class="chunk" style="border: 1px solid lightgray; padding: 3px; border-radius: 5px;">
-          <span style="position: relative; top: -15px; left: 5px; background: white; display: inline-block; color: gray; ">
+          <span style="position: relative; top: -15px; left: 10px; background: white; display: inline-block; color: gray; ">
             &nbsp; <a #{anchor}>#{config.name}</a> &nbsp;
           </span>
         </div>

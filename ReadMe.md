@@ -23,6 +23,10 @@ to build on updates to plugin or tests.
 
 ### To Do's
 - [ ] parse NAME and LANG as in reduce plugin instead of requiring them in JSON format in first line of chunk
-- [ ] experiment with using [Prism.js](http://prismjs.com/), or [SyntaxHighlighter](http://alexgorbatchev.com/SyntaxHighlighter/)
+- [ ] experiment with using [prism.js], or [sh] or even better [highlight.js]
 - [ ] keep styling in separate ```.css```
 - [ ] augment chunk title/name with a list of urls to the different parts, i.e. if current chunk is 3, then 1, 2 and 4 are links [1](1), [2](2), **3**, [4](4)
+
+[prism.js]: http://prismjs.com/ "Prism.js"
+[sh]: http://alexgorbatchev.com/SyntaxHighlighter/ "SyntaxHighlighter"
+[highlight.js]: http://highlightjs.org/ "highlight.js"

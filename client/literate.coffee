@@ -6,6 +6,30 @@ escape = (str) ->
 		.replace(/</g, '&lt;')
 		.replace(/>/g, '&gt;')
 
+
+parse = (text) ->
+  chunk = {name: "*", lang: "text", code: []}
+
+  lines = text.text.split /\n/
+  index = 0
+
+  words = lines[0].match /\S+/g
+  if words is null or words.length < 1
+      # ignore it
+  else if words[0] is 'NAME'
+    chunk.name = "#{(words[1..].join ' ').trim()}"
+    index = 1
+    words = lines[1].match /\S+/g
+    if words is null or words.length < 1
+      # ignore it
+    else if words[0] is 'LANG'
+        chunk.lang = "#{(words[1..].join ' ').trim()}"
+        index = 2
+
+  chunk.code = lines[index..]
+  chunk
+
+
 class window.plugins.literate
   load = (callback) ->
     wiki.getScript '/plugins/code/prettify.js', callback
@@ -16,14 +40,8 @@ class window.plugins.literate
   @emit: (div, item) ->
     load ->
       # extract name and configuration params
-      lines = item.text.split "\n"
-      config = lines.shift()
-      config = JSON.parse(config) # should be a JSON-like line, i.e. {name:"my preferred name", lang:"py", linenum=5}
-      config.name = config.name or "*"
-      item.name = config.name
-      config.lang = config.lang or "text"
-
-      code = lines.join "\n"
+      chunk = parse item
+      item.name = chunk.name
 
       # search whole page for code snippets with this same name
       #...for each count length (for reference too)
@@ -45,36 +63,34 @@ class window.plugins.literate
       #              from previous chunks with the same name) === Maybe not useful if creation of code distrib is delegated to
       #              another page (following the pattern of data provision / data consumption) ===
       if lits[item.name][0].id is item.id
-        anchor = "id=\"#{wiki.asSlug config.name}\""
+        anchor = "id=\"#{wiki.asSlug chunk.name}\""
       else
         anchor = ""
-      anchor += " href=\"#{"#".concat (wiki.asSlug config.name)}\""
+      anchor += " href=\"#{"#".concat (wiki.asSlug chunk.name)}\""
 
-      div.append """
-        <div class="chunk" style="border: 1px solid lightgray; padding: 3px; border-radius: 5px;">
+      div.append (codechunk = $ """
+        <div class="chunk" style="border: 1px solid gray; margin: 16px 16px; padding: 3px; border-radius: 5px;">
           <span style="position: relative; top: -15px; left: 10px; background: white; display: inline-block; color: gray; ">
-            &nbsp; <a #{anchor}>#{config.name}</a> &nbsp;
+            &nbsp; <a #{anchor}>#{chunk.name}</a> &nbsp;
           </span>
         </div>
-        """
-      ;
+        """)
 
-      codechunk = div.find(".chunk");  # TODO: is there a better way?
       # separate reference and plain code snippets
-      chunk = []
-      for c in lines
+      temp = []
+      for c in chunk.code
         if m = /^(.*)@\[(.*)\]@(.*)$/g.exec c
-          if chunk.length > 0
-            codechunk.append """<pre class="prettyprint lang-#{config.lang}" style="margin:0px; padding:0px">#{prettyPrintOne(escape(chunk.join "\n"))}</pre>"""
+          if temp.length > 0
+            codechunk.append """<pre class="prettyprint lang-#{chunk.lang}" style="margin:0px; padding:0px; position: relative; top: -8px">#{prettyPrintOne(escape(temp.join "\n"))}</pre>"""
           codechunk.append """
-            <pre class="prettyprint lang-text" style="margin:0px; padding:0px">#{prettyPrintOne(escape(m[1]))}<a href="#{"#".concat (wiki.asSlug m[2])}">@[#{m[2]}]@</a>#{prettyPrintOne(escape(m[3]))}</pre>
+            <pre class="prettyprint lang-text" style="margin:0px; padding:0px; position: relative; top: -8px">#{prettyPrintOne(escape(m[1]))}<a href="#{"#".concat (wiki.asSlug m[2])}">@[#{m[2]}]@</a>#{prettyPrintOne(escape(m[3]))}</pre>
             """
-          chunk = []
+          temp = []
         else
-          chunk.push c
+          temp.push c
 
-      if chunk.length > 0
-        codechunk.append """<pre class="prettyprint lang-#{config.lang}" style="margin:0px; padding:0px">#{prettyPrintOne(escape(chunk.join "\n"))}</pre>"""
+      if temp.length > 0
+        codechunk.append """<pre class="prettyprint lang-#{chunk.lang}" style="margin:0px; padding:0px; position: relative; top: -8px">#{prettyPrintOne(escape(chunk.code.join "\n"))}</pre>"""
 
 
   @bind: (div, item) ->

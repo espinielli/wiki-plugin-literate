@@ -76,21 +76,23 @@ class window.plugins.literate
         </div>
         """)
 
-      # separate reference and plain code snippets
-      temp = []
-      for c in chunk.code
-        if m = /^(.*)@\[(.*)\]@(.*)$/g.exec c
-          if temp.length > 0
-            codechunk.append """<pre class="prettyprint lang-#{chunk.lang}" style="margin:0px; padding:0px; position: relative; top: -8px">#{prettyPrintOne(escape(temp.join "\n"))}</pre>"""
-          codechunk.append """
-            <pre class="prettyprint lang-text" style="margin:0px; padding:0px; position: relative; top: -8px">#{prettyPrintOne(escape(m[1]))}<a href="#{"#".concat (wiki.asSlug m[2])}">@[#{m[2]}]@</a>#{prettyPrintOne(escape(m[3]))}</pre>
-            """
-          temp = []
+      # embed anchor for reference code snippets
+      newCode = []
+      for c, i in chunk.code
+        if (m = /^(.*)@\[(.*)\]@(.*)$/g.exec c)?
+          prefix = "#{escape(m[1])}"
+          url = "<a href=\"#{"#".concat (wiki.asSlug m[2])}\">@[#{m[2]}]@</a>"
+          postfix = "#{escape(m[3])}"
+          newCode.push (prefix + url + postfix)
         else
-          temp.push c
+          newCode.push (escape c)
 
-      if temp.length > 0
-        codechunk.append """<pre class="prettyprint lang-#{chunk.lang}" style="margin:0px; padding:0px; position: relative; top: -8px">#{prettyPrintOne(escape(chunk.code.join "\n"))}</pre>"""
+      # cater for empty last line: if you know a better way, let me know!
+      newCode.push ""
+      newCode.push ""
+      codechunk.append """<pre
+        class="prettyprint lang-#{chunk.lang}"
+        style="margin:0px; padding:0px; position: relative; top: -8px">#{prettyPrintOne(newCode.join "\n")}</pre>"""
 
 
   @bind: (div, item) ->
